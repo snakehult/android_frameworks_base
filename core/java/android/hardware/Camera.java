@@ -1134,8 +1134,14 @@ public class Camera {
          *         with at least one element.
          */
         public List<Size> getSupportedPictureSizes() {
-            String str = get(KEY_PICTURE_SIZE + SUPPORTED_VALUES_SUFFIX);
-            return splitSize(str);
+            //String str = get(KEY_PICTURE_SIZE + SUPPORTED_VALUES_SUFFIX);
+            //return splitSize(str);
+            ArrayList<Size> sizeList = new ArrayList<Size>();
+            sizeList.add(new Size(2592, 1728));
+            sizeList.add(new Size(2048, 1536));
+            sizeList.add(new Size(1600, 1200));
+            sizeList.add(new Size(1024, 768));
+            return sizeList;
         }
 
         /**
