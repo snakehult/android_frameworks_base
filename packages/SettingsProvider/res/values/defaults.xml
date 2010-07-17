@@ -49,7 +49,7 @@
     
     <bool name="def_backup_enabled">false</bool>
     <string name="def_backup_transport" translatable="false"></string>
-    <!-- Default value for whether or not to pulse the notification LED when there is a 
+    <!-- Default value for whether or not to blink the notification LED when there is a
          pending notification -->
-    <bool name="def_notification_pulse">true</bool>
+    <bool name="def_notification_blink">true</bool>
 </resources>

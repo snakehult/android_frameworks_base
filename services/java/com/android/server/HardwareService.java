@@ -311,24 +311,6 @@ public class HardwareService extends IHardwareService.Stub {
     }
 
     public void pulseBreathingLightColor(int color) {
-        synchronized (this) {
-            // HACK: Added at the last minute of cupcake -- design this better;
-            // Don't reuse the attention light -- make another one.
-            if (false) {
-                Log.d(TAG, "pulseBreathingLight mAttentionLightOn=" + mAttentionLightOn
-                        + " mPulsing=" + mPulsing);
-            }
-            if (!mAttentionLightOn && !mPulsing) {
-                mPulsing = true;
-                // Use LIGHT_ID_NOTIFICATIONS to allow full color. LIGHT_ID_ATTENTION only allows white and blue
-                int lightId = mContext.getResources().getBoolean(
-                        com.android.internal.R.bool.config_hasIntrusiveLed)
-                        ? LIGHT_ID_NOTIFICATIONS : LIGHT_ID_ATTENTION;
-                setLight_native(mNativePointer, lightId, color,
-                        LIGHT_FLASH_HARDWARE, 7, 0, 0);
-                mH.sendMessageDelayed(Message.obtain(mH, 1), 2000);
-            }
-        }
     }
 
     private Handler mH = new Handler() {

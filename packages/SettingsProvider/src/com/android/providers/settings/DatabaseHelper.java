@@ -524,14 +524,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (upgradeVersion == 42) {
             /*
-             * Initialize new notification pulse setting
+             * Initialize new notification blink setting
              */
             db.beginTransaction();
             try {
                 SQLiteStatement stmt = db.compileStatement("INSERT INTO system(name,value)"
                         + " VALUES(?,?);");
-                loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
-                        R.bool.def_notification_pulse);
+                loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_BLINK,
+                        R.bool.def_notification_blink);
                 stmt.close();
                 db.setTransactionSuccessful();
             } finally {
@@ -786,8 +786,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         loadDefaultHapticSettings(stmt);
 
-        loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
-                R.bool.def_notification_pulse);
+        loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_BLINK,
+                R.bool.def_notification_blink);
         stmt.close();
     }
 

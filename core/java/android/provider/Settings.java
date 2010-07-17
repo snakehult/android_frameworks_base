@@ -1544,28 +1544,19 @@ public final class Settings {
          * pending. The value is boolean (1 or 0).
          * @hide
          */
-        public static final String NOTIFICATION_LIGHT_PULSE = "notification_light_pulse";
-
+        public static final String NOTIFICATION_LIGHT_BLINK = "notification_light_blink";
         /**
-         * Whether the notification LED color should be blended with all
-	 * active notifications.
-	 * The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String NOTIFICATION_PULSE_BLEND = "notification_light_pulse_blend";
-
-        /**
-         * Whether to pulse the notification LED while the screen is on. The value is
+         * Whether to enable the notification LED while the screen is on. The value is
          * boolean (1 or 0).
          * @hide
          */
-        public static final String NOTIFICATION_SCREEN_ON = "notification_screen_on";
-
+        public static final String NOTIFICATION_ALWAYS_ON = "notification_always_on";
         /**
-         * Color to pulse the breathing light
+         * Whether to enable the battery LED while charging. The value is
+         * boolean (1 or 0).
          * @hide
          */
-        public static final String BREATHING_LIGHT_COLOR = "breathing_light_color";
+        public static final String NOTIFICATION_CHARGING = "notification_charging";
 
         /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
@@ -1651,8 +1642,9 @@ public final class Settings {
             SOUND_EFFECTS_ENABLED,
             HAPTIC_FEEDBACK_ENABLED,
             SHOW_WEB_SUGGESTIONS,
-            NOTIFICATION_LIGHT_PULSE,
-            NOTIFICATION_SCREEN_ON
+            NOTIFICATION_LIGHT_BLINK,
+            NOTIFICATION_ALWAYS_ON,
+            NOTIFICATION_CHARGING
         };
 
         
