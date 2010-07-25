@@ -704,6 +704,28 @@ public abstract class KeyInputQueue {
                                 di.mAbs.changed = true;
                                 di.mAbs.mNextData[di.mAbs.mAddingPointerOffset
                                     + MotionEvent.SAMPLE_SIZE] = ev.value;
+                            } else if (ev.scancode == RawInputEvent.ABS_MT_POSITION) {
+                                di.mAbs.changed = true;
+                                final int x = (ev.value>>16)&0x7fff;
+                                final int y = ev.value&0xffff;
+                                di.mAbs.mNextData[di.mAbs.mAddingPointerOffset
+                                        + MotionEvent.SAMPLE_X] = x;
+                                di.mAbs.mNextData[di.mAbs.mAddingPointerOffset
+                                        + MotionEvent.SAMPLE_Y] = y;
+                                if (DEBUG_POINTERS) Slog.v(TAG, "MT @"
+                                        + di.mAbs.mAddingPointerOffset
+                                        + " X:" + x + " Y:" + y);
+                            } else if (ev.scancode == RawInputEvent.ABS_MT_AMPLITUDE) {
+                                di.mAbs.changed = true;
+                                final int z = (ev.value>>16)&0xffff;
+                                final int w = ev.value&0xffff;
+                                di.mAbs.mNextData[di.mAbs.mAddingPointerOffset
+                                        + MotionEvent.SAMPLE_PRESSURE] = z;
+                                di.mAbs.mNextData[di.mAbs.mAddingPointerOffset
+                                        + MotionEvent.SAMPLE_SIZE] = w;
+                                if (DEBUG_POINTERS) Slog.v(TAG, "MT @"
+                                        + di.mAbs.mAddingPointerOffset
+                                        + " Z:" + z + " W:" + w);
                             }
                         
                         // Process position events from single touch protocol.
@@ -787,9 +809,26 @@ public abstract class KeyInputQueue {
                         // Handle multitouch protocol sync: tells us that the
                         // driver has returned all data for -one- of the pointers
                         // that is currently down.
-                        if (ev.type == RawInputEvent.EV_SYN
-                                && ev.scancode == RawInputEvent.SYN_MT_REPORT
-                                && di.mAbs != null) {
+                        final boolean ttFlag = (ev.type == RawInputEvent.EV_ABS &&
+                                                (classes&RawInputEvent.CLASS_TOUCHSCREEN_MT) != 0 &&
+                                                ev.scancode == RawInputEvent.ABS_MT_POSITION);
+                        if ( ttFlag ) {
+                            if ( ev.value < 0 ) {
+                                send = true;
+                                if (DEBUG_POINTERS) Slog.v(TAG, "MT @"
+                                                          + di.mAbs.mAddingPointerOffset
+                                                          + " 2/2: SEND");
+                            }
+                            else {
+                                if (DEBUG_POINTERS) Slog.v(TAG, "MT @"
+                                                          + di.mAbs.mAddingPointerOffset
+                                                          + " 1/2: WAIT FOR SECOND POINT");
+                            }
+                        }
+                        final boolean mtFlag = (ev.type == RawInputEvent.EV_SYN
+                                                && ev.scancode == RawInputEvent.SYN_MT_REPORT
+                                                && di.mAbs != null);
+                        if ( mtFlag || ttFlag ) {
                             di.mAbs.changed = true;
                             if (di.mAbs.mNextData[MotionEvent.SAMPLE_PRESSURE] > 0) {
                                 // If the value is <= 0, the pointer is not
@@ -812,10 +851,12 @@ public abstract class KeyInputQueue {
                                     if (DEBUG_POINTERS) Slog.v(TAG, "MT_REPORT: no pointer");
                                 }
                             }
+                        }
                         
+                        if (!mtFlag) {
                         // Handle general event sync: all data for the current
                         // event update has been delivered.
-                        } else if (send || (ev.type == RawInputEvent.EV_SYN
+                          if (send || (ev.type == RawInputEvent.EV_SYN
                                 && ev.scancode == RawInputEvent.SYN_REPORT)) {
                             if (mDisplay != null) {
                                 if (!mHaveGlobalMetaState) {
@@ -926,6 +967,7 @@ public abstract class KeyInputQueue {
                                     }
                                 }
                             }
+                          }
                         }
                     }
                 

@@ -183,6 +183,8 @@ public class RawInputEvent {
     public static final int ABS_MT_POSITION_Y = 0x36;
     public static final int ABS_MT_TOOL_TYPE = 0x37;
     public static final int ABS_MT_BLOB_ID = 0x38;
+    public static final int ABS_MT_POSITION = 0x39;
+    public static final int ABS_MT_AMPLITUDE = 0x3a;
     public static final int ABS_MAX = 0x3f;
 
     // Switch events
